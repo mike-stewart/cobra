@@ -201,13 +201,18 @@ __%[1]s_handle_reply()
     fi
 
     if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
-		if declare -F __%[1]s_custom_func >/dev/null; then
-			# try command name qualified custom func
-			__%[1]s_custom_func
-		else
-			# otherwise fall back to unqualified for compatibility
-			declare -F __custom_func >/dev/null && __custom_func
-		fi
+        # if a go completion function is provided, defer to that function
+        if [ -n "${has_completion_function}" ]; then
+            __%[1]s_handle_go_custom_completion
+        else
+            if declare -F __%[1]s_custom_func >/dev/null; then
+                # try command name qualified custom func
+                __%[1]s_custom_func
+            else
+                # otherwise fall back to unqualified for compatibility
+                declare -F __custom_func >/dev/null && __custom_func
+            fi
+        fi
     fi
 
     # available in bash-completion >= 2, not always present on macOS
