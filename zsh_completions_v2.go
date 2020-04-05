@@ -9,9 +9,9 @@ import (
 
 func genZshCompV2(buf *bytes.Buffer, name string, includeDesc bool) {
 	compCmd := CompRequestCmd
-	if includeDesc {
-		compCmd = CompWithDescRequestCmd
-	}
+	// if includeDesc {
+	// 	compCmd = CompWithDescRequestCmd
+	// }
 	buf.WriteString(fmt.Sprintf("# zsh completion for %-36s -*- shell-script -*-\n", name))
 	buf.WriteString(fmt.Sprintf(`
 __%[1]s_debug()

@@ -9,9 +9,9 @@ import (
 
 func genFishComp(buf *bytes.Buffer, name string, includeDesc bool) {
 	compCmd := CompRequestCmd
-	if includeDesc {
-		compCmd = CompWithDescRequestCmd
-	}
+	// if includeDesc {
+	// 	compCmd = CompWithDescRequestCmd
+	// }
 	buf.WriteString(fmt.Sprintf("# fish completion for %-36s -*- shell-script -*-\n", name))
 	buf.WriteString(fmt.Sprintf(`
 function __%[1]s_debug

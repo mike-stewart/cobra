@@ -150,37 +150,6 @@ func (c *Command) getCompletions(args []string) (*Command, []string, BashCompDir
 		}
 	}
 
-	if flag == nil {
-		// Complete subcommand names
-		for _, subCmd := range finalCmd.Commands() {
-			if subCmd.IsAvailableCommand() && strings.HasPrefix(subCmd.Name(), toComplete) {
-				comp := subCmd.Name()
-				if includeDesc {
-					comp = fmt.Sprintf("%s\t%s", comp, subCmd.Short)
-				}
-				completions = append(completions, comp)
-			}
-		}
-
-		if len(finalCmd.ValidArgs) > 0 {
-			// Always complete ValidArgs, even if we are completing a subcommand name.
-			// This is for commands that have both subcommands and ValidArgs.
-			for _, validArg := range finalCmd.ValidArgs {
-				if strings.HasPrefix(validArg, toComplete) {
-					completions = append(completions, validArg)
-				}
-			}
-
-			// If there are ValidArgs specified (even if they don't match), we stop completion.
-			// Only one of ValidArgs or ValidArgsFunction can be used for a single command.
-			return finalCmd, completions, BashCompDirectiveNoFileComp, nil
-		}
-
-		// Always let the logic continue so as to add any ValidArgsFunction completions,
-		// even if we already found sub-commands.
-		// This is for commands that have subcommands but also specify a ValidArgsFunction.
-	}
-
 	// Parse the flags and extract the arguments to prepare for calling the completion function
 	if err = finalCmd.ParseFlags(finalArgs); err != nil {
 		return finalCmd, completions, BashCompDirectiveDefault, fmt.Errorf("Error while parsing flags from args %v: %s", finalArgs, err.Error())
